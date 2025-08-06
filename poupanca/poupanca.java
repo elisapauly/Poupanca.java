@@ -1,62 +1,95 @@
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
-    public class poupanca {
+public class poupanca {
 
-        public static void main(String[] args){
+    public static void main(String[] args) {
 
-            JFrame frame = new JFrame("POUPANÇA");
-            frame.setSize(400,300);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame frame = new JFrame(" $ Poupex $ ");
+        frame.setSize(400, 230);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
 
-            JPanel panel = new JPanel();
-            panel.setBackground(Color.lightGray);
-            panel.setLayout(new BorderLayout());
+        BackgroundPanel panel = new BackgroundPanel("background.png");
+        GridBagConstraints gbc = new GridBagConstraints();
 
-            JButton button = new JButton("OK");
-            button.setBackground(Color.black);
-            button.setForeground(Color.white);
-            button.setPreferredSize(new Dimension(200, 50));
+        JLabel jurosLabel = new JLabel("Juros ao mes %:");
+        JLabel anosLabel = new JLabel("Numero de anos:");
+        JLabel depositoLabel = new JLabel("Deposito mensal R$:");
+        JLabel totalLabel = new JLabel("Total poupado R$:");
 
-            JTextField jurosField = new JTextField(10);
-            jurosField.setFont(new Font("Serif", Font.BOLD, 15));
+        JTextField jurosField = new JTextField(15);
+        jurosField.setBackground(new Color(240, 182, 230));
+        JTextField anosField = new JTextField(15);
+        anosField.setBackground(new Color(240, 182, 230));
+        JTextField depositoField = new JTextField(15);
+        depositoField.setBackground(new Color(240, 182, 230));
+        JTextField totalField = new JTextField(15);
+        totalField.setBackground(new Color(240, 182, 230));
+        totalField.setEditable(false);
 
-            JTextField anosField = new JTextField(10);
-            anosField.setFont(new Font("Serif", Font.BOLD, 15));
+        JButton okButton = new JButton("OK");
+        okButton.setPreferredSize(new Dimension(200, 30));
+        okButton.setBackground(new Color(173, 204, 255));
+        okButton.setFocusPainted(false);
 
-            JTextField depositoField = new JTextField(10);
-            depositoField.setFont(new Font("Serif", Font.BOLD, 15));
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double juros = Double.parseDouble(jurosField.getText());
+                    int anos = Integer.parseInt(anosField.getText());
+                    double deposito = Double.parseDouble(depositoField.getText());
 
-            JLabel label = new JLabel("Juros ao mes %: ");
-            label.setFont(new Font("Serif", Font.BOLD, 15));
+                    double total = calculo.calcularPoupanca(juros, anos, deposito);
+                    totalField.setText(String.format("R$ %.2f", total));
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(frame, "preencha todos os campos corretamente.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
-            JLabel label2 = new JLabel("Numero de anos: ");
-            label.setFont(new Font("Serif", Font.BOLD, 15));
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-            JLabel label3 = new JLabel("Deposito mensal: ");
-            label.setFont(new Font("Serif", Font.BOLD, 15));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(jurosLabel, gbc);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(jurosField, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(anosLabel, gbc);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(anosField, gbc);
 
-            JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            formPanel.add(label);
-            formPanel.add(jurosField);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(depositoLabel, gbc);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(depositoField, gbc);
 
-            JPanel formPanel2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            formPanel.add(label2);
-            formPanel.add(anosField);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(totalLabel, gbc);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(totalField, gbc);
 
-            JPanel formPanel3 = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            formPanel.add(label3);
-            formPanel.add(depositoField);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panel.add(okButton, gbc);
 
-            panel.add(formPanel, BorderLayout.NORTH);
-            panel.add(formPanel2, BorderLayout.CENTER);
-            panel.add(formPanel3, BorderLayout.SOUTH);
-            panel.add(button, BorderLayout.SOUTH);
-            frame.add(panel);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-
-        }
-    
+        frame.add(panel);
+        frame.setVisible(true);
+    }
 }
